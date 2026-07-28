@@ -1,6 +1,6 @@
 {
   "name": "ocean-surf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ブラウザで動く3Dサーフィンレース (single-file, no build step)",
   "private": true,
   "scripts": {

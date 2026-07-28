@@ -1333,7 +1333,11 @@ function drawMap() {
   c.clearRect(0, 0, W, W);
   var sc = Math.min(W / (MB.x1 - MB.x0), W / (MB.z1 - MB.z0));
   var ox = (W - (MB.x1 - MB.x0) * sc) / 2, oz = (W - (MB.z1 - MB.z0) * sc) / 2;
-  function px(x) { return ox + (x - MB.x0) * sc; }
+  // 上を +Z(うねりの進行方向)に固定した俯瞰図。X軸は反転させること。
+  // カメラは heading の背後から前方を見るので、+Z を向いているとき
+  // ワールド +X は画面の「左」に映る(three.js は右手系)。素直に
+  // +X を右に描くと、マップだけ左右が鏡像になる。
+  function px(x) { return ox + (MB.x1 - x) * sc; }
   function pz(z) { return W - (oz + (z - MB.z0) * sc); }
   c.strokeStyle = "rgba(255,255,255,.28)"; c.lineWidth = 3;
   c.beginPath(); c.moveTo(px(0), pz(0));
@@ -1353,7 +1357,8 @@ function drawMap() {
     if (o.isPlayer) {
       c.strokeStyle = "#8dffcf"; c.lineWidth = 3; c.beginPath();
       c.moveTo(px(o.x), pz(o.z));
-      c.lineTo(px(o.x) + Math.sin(o.yaw) * 16, pz(o.z) - Math.cos(o.yaw) * 16);
+      // heading=(sin yaw, cos yaw)。px が X を反転しているので x 成分も反転する
+      c.lineTo(px(o.x) - Math.sin(o.yaw) * 16, pz(o.z) - Math.cos(o.yaw) * 16);
       c.stroke();
     }
   });

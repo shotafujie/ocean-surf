@@ -1,0 +1,17 @@
+{
+  "name": "ocean-surf",
+  "version": "1.0.0",
+  "description": "ブラウザで動く3Dサーフィンレース (single-file, no build step)",
+  "private": true,
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "test": "npm run test:runtime && npm run test:race && npm run test:audio",
+    "test:runtime": "node tools/runtime-check.js",
+    "test:race": "node tools/race-sim.js",
+    "test:race:detail": "node tools/race-sim.js --detail",
+    "test:audio": "node tools/audio-test.js"
+  },
+  "devDependencies": {
+    "web-audio-engine": "^0.13.4"
+  }
+}

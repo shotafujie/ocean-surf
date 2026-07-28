@@ -2,6 +2,8 @@
 
 ブラウザだけで動く 3D サーフィンレース。`index.html` 一枚で完結します。
 
+**▶ 遊ぶ： https://shotafujie.github.io/ocean-surf/** （PC / キーボード必須）
+
 ## 遊び方
 
 | キー | 操作 |
@@ -39,21 +41,13 @@ npm test        # 実行時 / レース / 音声 の全検査
 
 ## 公開（GitHub Pages）
 
-```bash
-git init
-git add .
-git commit -m "OCEAN SURF"
-git branch -M main
-git remote add origin https://github.com/<ユーザー名>/<リポジトリ名>.git
-git push -u origin main
-```
+`main` ブランチのルートを Source にした Pages で公開しています。`main` に push すれば
+1〜2 分で https://shotafujie.github.io/ocean-surf/ に反映されます。
 
-リポジトリの **Settings → Pages** で Source を `Deploy from a branch`、Branch を `main` / `/ (root)` に設定して保存。1〜2 分で
-`https://<ユーザー名>.github.io/<リポジトリ名>/` に公開されます。
-
-- リポジトリは **Public** にしてください（Free プランの場合）
-- `index.html` という名前がそのままトップページになります
-- キーボード必須のためスマホでは遊べません（その旨の注意書きが出ます）
+- ビルド工程は無いので、`index.html` がそのままトップページになります
+- キーボード必須のためスマホでは遊べません（`pointer: fine` を見て注意書きが出ます）
+- three.js は CDN 依存。読み込めない環境／WebGL が使えない環境では、
+  黒画面のまま止まらず理由を表示します
 
 ## ライセンス
 

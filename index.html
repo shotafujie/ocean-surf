@@ -10,6 +10,7 @@
 <meta property="og:title" content="OCEAN SURF — POINT BREAK RACE">
 <meta property="og:description" content="ブラウザで動く3Dサーフィンレース。波の斜面を斜めに滑り続けると加速する。ライバル4人とRTA。">
 <meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2303101c'/><path d='M0 38q16-16 32 0t32 0V64H0Z' fill='%232f8fd0'/><path d='M0 26q16-16 32 0t32 0v14q-16 16-32 0T0 40Z' fill='%238dffcf'/></svg>">
 <style>
   html,body{margin:0;padding:0;overflow:hidden;background:#04121f;color:#fff;
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif;}
@@ -73,7 +74,8 @@
   #go{margin-top:26px;font-size:13px;letter-spacing:4px;animation:bl 1.4s ease-in-out infinite;}
   @keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
   #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-    background:#03101c;z-index:20;font-size:12px;letter-spacing:4px;opacity:.7;}
+    background:#03101c;z-index:20;font-size:12px;letter-spacing:4px;opacity:.7;
+    text-align:center;line-height:2;padding:0 24px;}
 </style>
 </head>
 <body>
@@ -145,6 +147,24 @@
 <script>
 (function () {
 "use strict";
+
+// ---------------------------------------------------------------------------
+// 起動できない環境への説明。ここで止めないと "LOADING OCEAN…" のまま
+// 何も起きず、公開URLを踏んだ人には原因が分からない。
+// ---------------------------------------------------------------------------
+function fatal(msg) {
+  var l = document.getElementById("load");
+  if (!l) return;
+  l.style.display = "flex";
+  l.style.opacity = "1";          // 既定の .7 のままだと下のスタート画面が透けて読めない
+  l.style.color = "#ffc9a8";
+  l.style.letterSpacing = "1px";
+  l.innerHTML = msg;
+}
+if (typeof THREE === "undefined") {
+  fatal("three.js を読み込めませんでした。<br>ネットワーク接続を確認して再読み込みしてください。");
+  return;
+}
 
 // ===========================================================================
 // 波 : CPU(物理) と GPU(描画) で完全に同じ式を使う
@@ -220,7 +240,13 @@ function segLen(i) {
 // 描画基盤
 // ===========================================================================
 var FOG_COL = new THREE.Color(0x8ec6dd);
-var renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+var renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+} catch (e) {
+  fatal("WebGL を初期化できませんでした。<br>ブラウザの設定でハードウェアアクセラレーションを有効にしてください。");
+  return;
+}
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputEncoding = THREE.sRGBEncoding;
